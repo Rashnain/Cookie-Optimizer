@@ -5,7 +5,7 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    QGuiApplication::setApplicationDisplayName("Cookie Optimizer v1.0.1");
+    QGuiApplication::setApplicationDisplayName("Cookie Optimizer v1.1.0");
     QGuiApplication::setWindowIcon(QIcon("/media/stockage_2/SteamLibrary/steamapps/common/Cookie Clicker/resources/app/src/img/goldCookie.png"));
 
     CookieOptimizer dialog;
