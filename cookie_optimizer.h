@@ -1,6 +1,8 @@
 #ifndef COOKIE_OPTIMIZER_H
 #define COOKIE_OPTIMIZER_H
 
+#include <unistd.h>
+#include <fstream>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QComboBox>
@@ -17,9 +19,14 @@ private:
     void addRow();
     void updateResults() const;
     void buy(int index) const;
+    template<typename T>
+    void removeItem(std::vector<T>& vec, int row);
     void removeRow(int row);
 
     static double sumPrice(double price, int amount);
+
+    void save() const;
+    void load();
 
     QGridLayout *gridLayout;
 

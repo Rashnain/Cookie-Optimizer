@@ -10,13 +10,19 @@ CookieOptimizer::CookieOptimizer(QWidget *parent) : QWidget(parent)
 
     gridLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::Expanding), 100, 0);
 
-    addRow();
-    addRow();
+    if (access("data.csv", F_OK) == -1) {
+        addRow();
+        addRow();
+    }
+    else
+        load();
 
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 CookieOptimizer::~CookieOptimizer() {
+    save();
+
     delete gridLayout;
 
     delete valueSpinBox;
@@ -202,29 +208,26 @@ void CookieOptimizer::buy(const int index) const
     }
 }
 
+template<typename T>
+void CookieOptimizer::removeItem(std::vector<T>& vec, int row)
+{
+    gridLayout->removeWidget(vec[row]);
+    delete vec[row];
+    vec[row] = nullptr;
+}
+
 void CookieOptimizer::removeRow(const int row)
 {
-    gridLayout->removeWidget(priceSpinBox[row]);
-    delete priceSpinBox[row];
-    priceSpinBox[row] = nullptr;
-    gridLayout->removeWidget(priceComboBox[row]);
-    delete priceComboBox[row];
-    gridLayout->removeWidget(cpsSpinBox[row]);
-    delete cpsSpinBox[row];
-    gridLayout->removeWidget(cpsComboBox[row]);
-    delete cpsComboBox[row];
-    gridLayout->removeWidget(amountSpinBox[row]);
-    delete amountSpinBox[row];
-    gridLayout->removeWidget(priceLabel[row]);
-    delete priceLabel[row];
-    gridLayout->removeWidget(cpsLabel[row]);
-    delete cpsLabel[row];
-    gridLayout->removeWidget(ratioLabel[row]);
-    delete ratioLabel[row];
-    gridLayout->removeWidget(buyButton[row]);
-    delete buyButton[row];
-    gridLayout->removeWidget(removeButton[row]);
-    delete removeButton[row];
+    removeItem(priceSpinBox, row);
+    removeItem(priceComboBox, row);
+    removeItem(cpsSpinBox, row);
+    removeItem(cpsComboBox, row);
+    removeItem(amountSpinBox, row);
+    removeItem(priceLabel, row);
+    removeItem(cpsLabel, row);
+    removeItem(ratioLabel, row);
+    removeItem(buyButton, row);
+    removeItem(removeButton, row);
 }
 
 double CookieOptimizer::sumPrice(const double price, const int amount)
@@ -232,4 +235,69 @@ double CookieOptimizer::sumPrice(const double price, const int amount)
     if (amount == 1)
         return price;
     return price + sumPrice(price * 1.15, amount-1);
+}
+
+void CookieOptimizer::save() const {
+    const double value = valueSpinBox->value();
+    const int valueIndex = valueComboBox->currentIndex();
+    const double prod = productionSpinBox->value();
+    const int prodIndex = productionComboBox->currentIndex();
+
+    std::ofstream file("data.csv");
+    file << value << " " << valueIndex << " " << prod << " " << prodIndex << std::endl;
+
+    for (int i = 0; i < priceSpinBox.size(); i++) {
+        if (priceSpinBox[i] == nullptr) continue;
+        const double price = priceSpinBox[i]->value();
+        const int priceIndex = priceComboBox[i]->currentIndex();
+        const double cps = cpsSpinBox[i]->value();
+        const int cpsIndex = cpsComboBox[i]->currentIndex();
+        const int amount = amountSpinBox[i]->value();
+        file << price << " " << priceIndex << " " << cps << " " << cpsIndex << " " << amount << std::endl;
+    }
+
+    file.close();
+}
+
+void CookieOptimizer::load() {
+    std::ifstream file("data.csv");
+
+    std::string line;
+    bool firstTime = true;
+    int index = 0;
+    double price;
+    int priceMult;
+    double cps;
+    int cpsMult;
+    int amount;
+
+    while (getline(file, line)) {
+        size_t i = line.find(".", 0, 1);
+        while (i != -1) {
+            line = line.replace(i, 1, ",");
+            i = line.find(".", 0, 1);
+        }
+
+        addRow();
+
+        if (firstTime) {
+            sscanf(line.c_str(), "%lf %d %lf %d", &price, &priceMult, &cps, &cpsMult);
+            valueSpinBox->setValue(price);
+            valueComboBox->setCurrentIndex(priceMult);
+            productionSpinBox->setValue(cps);
+            productionComboBox->setCurrentIndex(cpsMult);
+            firstTime = false;
+        } else {
+            sscanf(line.c_str(), "%lf %d %lf %d %d", &price, &priceMult, &cps, &cpsMult, &amount);
+            priceSpinBox[index]->setValue(price);
+            priceComboBox[index]->setCurrentIndex(priceMult);
+            cpsSpinBox[index]->setValue(cps);
+            cpsComboBox[index]->setCurrentIndex(cpsMult);
+            amountSpinBox[index]->setValue(amount);
+            index++;
+        }
+    }
+    removeRow(index);
+
+    file.close();
 }
