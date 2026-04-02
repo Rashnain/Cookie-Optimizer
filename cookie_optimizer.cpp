@@ -60,7 +60,7 @@ void CookieOptimizer::addRow()
 
         valueComboBox = new QComboBox();
         valueComboBox->addItems(units);
-        valueComboBox->setCurrentIndex(2);
+        valueComboBox->setCurrentIndex(0);
 
         productionSpinBox = new QDoubleSpinBoxCustom();
         productionSpinBox->setMaximum(9999);
@@ -68,7 +68,7 @@ void CookieOptimizer::addRow()
 
         productionComboBox = new QComboBox();
         productionComboBox->addItems(units);
-        productionComboBox->setCurrentIndex(1);
+        productionComboBox->setCurrentIndex(0);
 
         secondesLabel = new QLabel();
         secondesLabel->setFrameStyle(frameStyle);
