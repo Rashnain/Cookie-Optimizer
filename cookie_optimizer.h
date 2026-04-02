@@ -1,7 +1,6 @@
 #ifndef COOKIE_OPTIMIZER_H
 #define COOKIE_OPTIMIZER_H
 
-#include <QGuiApplication>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QComboBox>
@@ -14,7 +13,7 @@ public:
     explicit CookieOptimizer(QWidget *parent = nullptr);
     ~CookieOptimizer() override;
 
-private slots:
+private:
     void addRow();
     void updateResults() const;
     void buy(int index) const;
@@ -22,7 +21,6 @@ private slots:
 
     static double sumPrice(double price, int amount);
 
-private:
     QGridLayout *gridLayout;
 
     QDoubleSpinBoxCustom *valueSpinBox;

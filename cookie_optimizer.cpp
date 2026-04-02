@@ -13,7 +13,6 @@ CookieOptimizer::CookieOptimizer(QWidget *parent) : QWidget(parent)
     addRow();
     addRow();
 
-    setWindowTitle(QGuiApplication::applicationDisplayName());
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
