@@ -10,12 +10,10 @@ CookieOptimizer::CookieOptimizer(QWidget *parent) : QWidget(parent)
 
     gridLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::Expanding), 100, 0);
 
-    if (access("data.csv", F_OK) == -1) {
+    if (!load()) {
         addRow();
         addRow();
     }
-    else
-        load();
 
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
@@ -259,8 +257,9 @@ void CookieOptimizer::save() const {
     file.close();
 }
 
-void CookieOptimizer::load() {
+bool CookieOptimizer::load() {
     std::ifstream file("data.csv");
+    if (!file.good()) return false;
 
     std::string line;
     bool firstTime = true;
@@ -271,24 +270,21 @@ void CookieOptimizer::load() {
     int cpsMult;
     int amount;
 
+    std::istream::pos_type cursor = file.tellg();
     while (getline(file, line)) {
-        size_t i = line.find(".", 0, 1);
-        while (i != -1) {
-            line = line.replace(i, 1, ",");
-            i = line.find(".", 0, 1);
-        }
+        file.seekg(cursor);
 
         addRow();
 
         if (firstTime) {
-            sscanf(line.c_str(), "%lf %d %lf %d", &price, &priceMult, &cps, &cpsMult);
+            file >> price >> priceMult >> cps >> cpsMult;
             valueSpinBox->setValue(price);
             valueComboBox->setCurrentIndex(priceMult);
             productionSpinBox->setValue(cps);
             productionComboBox->setCurrentIndex(cpsMult);
             firstTime = false;
         } else {
-            sscanf(line.c_str(), "%lf %d %lf %d %d", &price, &priceMult, &cps, &cpsMult, &amount);
+            file >> price >> priceMult >> cps >> cpsMult >> amount;
             priceSpinBox[index]->setValue(price);
             priceComboBox[index]->setCurrentIndex(priceMult);
             cpsSpinBox[index]->setValue(cps);
@@ -296,8 +292,13 @@ void CookieOptimizer::load() {
             amountSpinBox[index]->setValue(amount);
             index++;
         }
+
+        cursor = file.tellg();
+        cursor += 1;
+        file.seekg(cursor);
     }
     removeRow(index);
 
     file.close();
+    return true;
 }

@@ -1,7 +1,6 @@
 #ifndef COOKIE_OPTIMIZER_H
 #define COOKIE_OPTIMIZER_H
 
-#include <unistd.h>
 #include <fstream>
 #include <QGridLayout>
 #include <QPushButton>
@@ -26,7 +25,7 @@ private:
     static double sumPrice(double price, int amount);
 
     void save() const;
-    void load();
+    bool load();
 
     QGridLayout *gridLayout;
 
