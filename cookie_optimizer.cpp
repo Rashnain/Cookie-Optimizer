@@ -188,11 +188,11 @@ void CookieOptimizer::updateResults() const
             const double ratio = cps * cpsMult / (price * priceMult) * 100 * 1000;
             sprintf(buffer, "%.3f %%", ratio);
             if (ratio < 1)
-                ratioLabel[i]->setStyleSheet("QLabel { background-color : #A00; color : white; }");
+                ratioLabel[i]->setStyleSheet("QLabel { background-color : #A00; }");
             else if (ratio < 2)
-                ratioLabel[i]->setStyleSheet("QLabel { background-color : #AA0; color : white; }");
+                ratioLabel[i]->setStyleSheet("QLabel { background-color : #AA0; color : black; }");
             else
-                ratioLabel[i]->setStyleSheet("QLabel { background-color : #0A0; color : white; }");
+                ratioLabel[i]->setStyleSheet("QLabel { background-color : #0A0; color : black; }");
             ratioLabel[i]->setText(buffer);
         }
     }
