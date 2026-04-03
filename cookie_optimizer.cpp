@@ -76,6 +76,9 @@ void CookieOptimizer::addRow()
         minutesLabel = new QLabel();
         minutesLabel->setFrameStyle(frameStyle);
 
+        percentLabel = new QLabel();
+        percentLabel->setFrameStyle(frameStyle);
+
         connect(valueSpinBox, &QDoubleSpinBox::valueChanged, this, &CookieOptimizer::updateResults);
         connect(valueComboBox, &QComboBox::currentIndexChanged, this, &CookieOptimizer::updateResults);
         connect(productionSpinBox, &QDoubleSpinBox::valueChanged, this, &CookieOptimizer::updateResults);
@@ -87,6 +90,7 @@ void CookieOptimizer::addRow()
         gridLayout->addWidget(productionComboBox, 0, 3);
         gridLayout->addWidget(secondesLabel, 0, 5);
         gridLayout->addWidget(minutesLabel, 0, 6);
+        gridLayout->addWidget(percentLabel, 0, 7);
     }
 
     priceSpinBox.push_back(new QDoubleSpinBoxCustom());
@@ -167,6 +171,8 @@ void CookieOptimizer::updateResults() const
         secondesLabel->setText(buffer);
         sprintf(buffer, "%.1f m", time / 60);
         minutesLabel->setText(buffer);
+        sprintf(buffer, "1%% = %.1f", prod / 100);
+        percentLabel->setText(buffer);
     }
 
     for (int i = 0; i < priceSpinBox.size(); i++) {
