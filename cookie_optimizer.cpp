@@ -175,6 +175,9 @@ void CookieOptimizer::updateResults() const
         percentLabel->setText(buffer);
     }
 
+    double min = 1e9, max = 0;
+    double ratios[priceSpinBox.size()];
+
     for (int i = 0; i < priceSpinBox.size(); i++) {
         if (priceSpinBox[i] == nullptr) continue;
         double price = priceSpinBox[i]->value();
@@ -193,14 +196,39 @@ void CookieOptimizer::updateResults() const
             cpsLabel[i]->setText(buffer);
             const double ratio = cps * cpsMult / (price * priceMult) * 100 * 1000;
             sprintf(buffer, "%.3f %%", ratio);
-            if (ratio < 1)
-                ratioLabel[i]->setStyleSheet("QLabel { background-color : #A00; }");
-            else if (ratio < 2)
-                ratioLabel[i]->setStyleSheet("QLabel { background-color : #AA0; color : black; }");
-            else
-                ratioLabel[i]->setStyleSheet("QLabel { background-color : #0A0; color : black; }");
             ratioLabel[i]->setText(buffer);
-        }
+            ratios[i] = ratio;
+            if (ratio < min)
+                min = ratio;
+            if (ratio > max)
+                max = ratio;
+        } else
+            ratios[i] = -1;
+    }
+
+    constexpr int color_min[] = {170, 0};
+    constexpr int color_max[] = {0, 170};
+    const double diff_min_max = max - min != 0.0 ? max - min : 1.0;
+    for (int i = 0; i < priceSpinBox.size(); i++) {
+        if (priceSpinBox[i] == nullptr) continue;
+        if (ratios[i] == -1) continue;
+        double ratio_diff = (ratios[i] - min) / diff_min_max;
+        double x = color_min[0] * (1 - ratio_diff) + color_max[0] * ratio_diff;
+        double y = color_min[1] * (1 - ratio_diff) + color_max[1] * ratio_diff;
+        double text = ratio_diff > 0.5 ? 0 : 255;
+        ratioLabel[i]->setStyleSheet("QLabel { background-color : rgb("
+            + tr(std::to_string(int(x)).c_str())
+            + ", "
+            + tr(std::to_string(int(y)).c_str())
+            + ", 0); "
+            + "color : rgb("
+            + tr(std::to_string(int(text)).c_str())
+            + ", "
+            + tr(std::to_string(int(text)).c_str())
+            + ", "
+            + tr(std::to_string(int(text)).c_str())
+            + "); }"
+        );
     }
 }
 
