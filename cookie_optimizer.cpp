@@ -260,6 +260,7 @@ void CookieOptimizer::removeRow(const int row)
     removeItem(ratioLabel, row);
     removeItem(buyButton, row);
     removeItem(removeButton, row);
+    updateResults();
 }
 
 double CookieOptimizer::sumPrice(const double price, const int amount)
