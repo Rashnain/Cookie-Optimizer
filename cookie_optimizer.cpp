@@ -171,7 +171,7 @@ void CookieOptimizer::updateResults() const
         secondesLabel->setText(buffer);
         sprintf(buffer, "%.1f m", time / 60);
         minutesLabel->setText(buffer);
-        sprintf(buffer, "1%% = %.1f", prod / 100);
+        sprintf(buffer, "%.3f", prod / 100);
         percentLabel->setText(buffer);
     }
 
