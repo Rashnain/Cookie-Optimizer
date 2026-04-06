@@ -277,7 +277,7 @@ void CookieOptimizer::save() const {
     const double prod = productionSpinBox->value();
     const int prodIndex = productionComboBox->currentIndex();
 
-    std::ofstream file("data.csv");
+    std::ofstream file("cookie_optimizer.csv");
     int row = 0;
     for (auto price_spin_box : priceSpinBox)
         if (price_spin_box != nullptr)
@@ -298,7 +298,7 @@ void CookieOptimizer::save() const {
 }
 
 bool CookieOptimizer::load() {
-    std::ifstream file("data.csv");
+    std::ifstream file("cookie_optimizer.csv");
     if (!file.good()) return false;
 
     double price;
