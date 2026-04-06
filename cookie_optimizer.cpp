@@ -278,7 +278,11 @@ void CookieOptimizer::save() const {
     const int prodIndex = productionComboBox->currentIndex();
 
     std::ofstream file("data.csv");
-    file << value << " " << valueIndex << " " << prod << " " << prodIndex << std::endl;
+    int row = 0;
+    for (auto price_spin_box : priceSpinBox)
+        if (price_spin_box != nullptr)
+            row++;
+    file << value << " " << valueIndex << " " << prod << " " << prodIndex << " " << row << std::endl;
 
     for (int i = 0; i < priceSpinBox.size(); i++) {
         if (priceSpinBox[i] == nullptr) continue;
@@ -297,43 +301,32 @@ bool CookieOptimizer::load() {
     std::ifstream file("data.csv");
     if (!file.good()) return false;
 
-    std::string line;
-    bool firstTime = true;
-    int index = 0;
     double price;
     int priceMult;
     double cps;
     int cpsMult;
+    int row;
     int amount;
 
-    std::istream::pos_type cursor = file.tellg();
-    while (getline(file, line)) {
-        file.seekg(cursor);
+    addRow();
 
-        addRow();
+    file >> price >> priceMult >> cps >> cpsMult >> row;
+    valueSpinBox->setValue(price);
+    valueComboBox->setCurrentIndex(priceMult);
+    productionSpinBox->setValue(cps);
+    productionComboBox->setCurrentIndex(cpsMult);
 
-        if (firstTime) {
-            file >> price >> priceMult >> cps >> cpsMult;
-            valueSpinBox->setValue(price);
-            valueComboBox->setCurrentIndex(priceMult);
-            productionSpinBox->setValue(cps);
-            productionComboBox->setCurrentIndex(cpsMult);
-            firstTime = false;
-        } else {
-            file >> price >> priceMult >> cps >> cpsMult >> amount;
-            priceSpinBox[index]->setValue(price);
-            priceComboBox[index]->setCurrentIndex(priceMult);
-            cpsSpinBox[index]->setValue(cps);
-            cpsComboBox[index]->setCurrentIndex(cpsMult);
-            amountSpinBox[index]->setValue(amount);
-            index++;
-        }
+    for (int i = 0; i < row ; i++) {
+        file >> price >> priceMult >> cps >> cpsMult >> amount;
+        priceSpinBox[i]->setValue(price);
+        priceComboBox[i]->setCurrentIndex(priceMult);
+        cpsSpinBox[i]->setValue(cps);
+        cpsComboBox[i]->setCurrentIndex(cpsMult);
+        amountSpinBox[i]->setValue(amount);
 
-        cursor = file.tellg();
-        cursor += 1;
-        file.seekg(cursor);
+        if (i + 1 < row)
+            addRow();
     }
-    removeRow(index);
 
     file.close();
     return true;
