@@ -195,7 +195,7 @@ void CookieOptimizer::updateResults() const
             sprintf(buffer, "%.3f", cps);
             cpsLabel[i]->setText(buffer);
             const double ratio = cps * cpsMult / (price * priceMult) * 100 * 1000;
-            sprintf(buffer, "%.3f %%", ratio);
+            sprintf(buffer, "%.3f", ratio);
             ratioLabel[i]->setText(buffer);
             ratios[i] = ratio;
             if (ratio < min)
