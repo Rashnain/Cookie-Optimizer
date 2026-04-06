@@ -135,12 +135,12 @@ void CookieOptimizer::addRow()
     connect(cpsSpinBox[index], &QDoubleSpinBox::valueChanged, this, &CookieOptimizer::updateResults);
     connect(cpsComboBox[index], &QComboBox::currentIndexChanged, this, &CookieOptimizer::updateResults);
     connect(amountSpinBox[index], &QSpinBox::valueChanged, this, &CookieOptimizer::updateResults);
-    connect(buyButton[index], &QAbstractButton::clicked, this, [=]{ buy(index); });
+    connect(buyButton[index], &QAbstractButton::clicked, this, [this, index]{ buy(index); });
 
     if (index == 0)
         connect(removeButton[index], &QAbstractButton::clicked, this, &CookieOptimizer::addRow);
     else
-        connect(removeButton[index], &QAbstractButton::clicked, this, [=]{ removeRow(index); });
+        connect(removeButton[index], &QAbstractButton::clicked, this, [this, index]{ removeRow(index); });
 
     gridLayout->addWidget(priceSpinBox[index], index + 1, 0);
     gridLayout->addWidget(priceComboBox[index], index + 1, 1);
@@ -205,6 +205,7 @@ void CookieOptimizer::updateResults() const
         } else
             ratios[i] = -1;
     }
+    delete[] buffer;
 
     constexpr int color_min[] = {170, 0};
     constexpr int color_max[] = {0, 170};
