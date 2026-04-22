@@ -194,9 +194,7 @@ void CookieOptimizer::updateResults() const
             priceLabel[i]->setText(buffer);
             sprintf(buffer, "%.3f", cps);
             cpsLabel[i]->setText(buffer);
-            const double ratio = cps * cpsMult / (price * priceMult) * 100 * 1000;
-            sprintf(buffer, "%.3f", ratio);
-            ratioLabel[i]->setText(buffer);
+            const double ratio = cps * cpsMult / (price * priceMult);
             ratios[i] = ratio;
             if (ratio < min)
                 min = ratio;
@@ -205,7 +203,6 @@ void CookieOptimizer::updateResults() const
         } else
             ratios[i] = -1;
     }
-    delete[] buffer;
 
     constexpr int color_min[] = {170, 0};
     constexpr int color_max[] = {0, 170};
@@ -217,6 +214,8 @@ void CookieOptimizer::updateResults() const
         double x = color_min[0] * (1 - ratio_diff) + color_max[0] * ratio_diff;
         double y = color_min[1] * (1 - ratio_diff) + color_max[1] * ratio_diff;
         double text = ratio_diff > 0.5 ? 0 : 255;
+        sprintf(buffer, "%.1f %%", ratio_diff * 100);
+        ratioLabel[i]->setText(buffer);
         ratioLabel[i]->setStyleSheet("QLabel { background-color : rgb("
             + tr(std::to_string(int(x)).c_str())
             + ", "
@@ -231,6 +230,7 @@ void CookieOptimizer::updateResults() const
             + "); }"
         );
     }
+    delete[] buffer;
 }
 
 void CookieOptimizer::buy(const int index) const
