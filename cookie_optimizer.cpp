@@ -49,8 +49,9 @@ void CookieOptimizer::addRow()
 
     constexpr int frameStyle = QFrame::Sunken | QFrame::Panel;
 
-    const QStringList units{tr("K"), tr("M"), tr("B"), tr("T"), tr("Qa"), tr("Qi"),
-            tr("Sx"), tr("Sp"), tr("O"), tr("N"), tr("D")};
+    const QStringList units{tr("K"), tr("M"), tr("B"), tr("T"), tr("Qa"), tr("Qi"), tr("Sx"), tr("Sp"),
+        tr("O"), tr("N"), tr("D"), tr("UD"), tr("DD"), tr("TD"), tr("QaD"), tr("QiD"), tr("SxD"),
+        tr("SpD"), tr("OD"), tr("ND"), tr("V"), tr("UV"), tr("DV"), tr("TV"), tr("QaV"), tr("QiV")};
 
     if (index == 0) {
         valueSpinBox = new QDoubleSpinBoxCustom();
