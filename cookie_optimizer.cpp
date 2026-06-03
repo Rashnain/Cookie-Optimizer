@@ -233,9 +233,12 @@ void CookieOptimizer::updateResults() const
 
 void CookieOptimizer::buy(const int index) const
 {
-    if (priceSpinBox[index]->value() != 0) {
-        priceSpinBox[index]->setValue(priceSpinBox[index]->value() * 1.15);
-        amountSpinBox[index]->setValue(amountSpinBox[index]->value() - 1);
+    priceSpinBox[index]->setValue(priceSpinBox[index]->value() * 1.15);
+    amountSpinBox[index]->setValue(amountSpinBox[index]->value() - 1);
+
+    if (priceSpinBox[index]->value() > 1000) {
+        priceSpinBox[index]->setValue(priceSpinBox[index]->value() / 1000);
+        priceComboBox[index]->setCurrentIndex(priceComboBox[index]->currentIndex() + 1);
     }
 }
 
