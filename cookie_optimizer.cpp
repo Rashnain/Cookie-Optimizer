@@ -27,8 +27,7 @@ CookieOptimizer::~CookieOptimizer() {
     delete valueComboBox;
     delete productionSpinBox;
     delete productionComboBox;
-    delete secondesLabel;
-    delete minutesLabel;
+    delete minuteLabel;
 
     for (int i = 0; i < priceSpinBox.size(); i++) {
         delete priceSpinBox[i];
@@ -70,11 +69,8 @@ void CookieOptimizer::addRow()
         productionComboBox->addItems(units);
         productionComboBox->setCurrentIndex(0);
 
-        secondesLabel = new QLabel();
-        secondesLabel->setFrameStyle(frameStyle);
-
-        minutesLabel = new QLabel();
-        minutesLabel->setFrameStyle(frameStyle);
+        minuteLabel = new QLabel();
+        minuteLabel->setFrameStyle(frameStyle);
 
         percentLabel = new QLabel();
         percentLabel->setFrameStyle(frameStyle);
@@ -88,8 +84,7 @@ void CookieOptimizer::addRow()
         gridLayout->addWidget(valueComboBox, 0, 1);
         gridLayout->addWidget(productionSpinBox, 0, 2);
         gridLayout->addWidget(productionComboBox, 0, 3);
-        gridLayout->addWidget(secondesLabel, 0, 5);
-        gridLayout->addWidget(minutesLabel, 0, 6);
+        gridLayout->addWidget(minuteLabel, 0, 6);
         gridLayout->addWidget(percentLabel, 0, 7);
     }
 
@@ -167,10 +162,8 @@ void CookieOptimizer::updateResults() const
 
     if (value != 0 && prod != 0) {
         const double time = value * valueMult / (prod * prodMult);
-        sprintf(buffer, "%.0f s", time);
-        secondesLabel->setText(buffer);
         sprintf(buffer, "%.1f m", time / 60);
-        minutesLabel->setText(buffer);
+        minuteLabel->setText(buffer);
         sprintf(buffer, "%.3f", prod / 100);
         percentLabel->setText(buffer);
     }

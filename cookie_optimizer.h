@@ -33,8 +33,7 @@ private:
     QComboBox *valueComboBox;
     QDoubleSpinBoxCustom *productionSpinBox;
     QComboBox *productionComboBox;
-    QLabel *secondesLabel;
-    QLabel *minutesLabel;
+    QLabel *minuteLabel;
     QLabel *percentLabel;
 
     std::vector<QDoubleSpinBoxCustom *> priceSpinBox;
