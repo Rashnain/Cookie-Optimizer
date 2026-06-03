@@ -278,13 +278,14 @@ void CookieOptimizer::save() const {
     const int valueIndex = valueComboBox->currentIndex();
     const double prod = productionSpinBox->value();
     const int prodIndex = productionComboBox->currentIndex();
+    const int percent = percentSpinBox->value();
 
     std::ofstream file("cookie_optimizer.csv");
     int row = 0;
     for (auto price_spin_box : priceSpinBox)
         if (price_spin_box != nullptr)
             row++;
-    file << value << " " << valueIndex << " " << prod << " " << prodIndex << " " << row << std::endl;
+    file << value << " " << valueIndex << " " << prod << " " << prodIndex << " " << row << " " << percent << std::endl;
 
     for (int i = 0; i < priceSpinBox.size(); i++) {
         if (priceSpinBox[i] == nullptr) continue;
@@ -309,14 +310,16 @@ bool CookieOptimizer::load() {
     int cpsMult;
     int row;
     int amount;
+    int percent;
 
     addRow();
 
-    file >> price >> priceMult >> cps >> cpsMult >> row;
+    file >> price >> priceMult >> cps >> cpsMult >> row >> percent;
     valueSpinBox->setValue(price);
     valueComboBox->setCurrentIndex(priceMult);
     productionSpinBox->setValue(cps);
     productionComboBox->setCurrentIndex(cpsMult);
+    percentSpinBox->setValue(percent);
 
     for (int i = 0; i < row ; i++) {
         file >> price >> priceMult >> cps >> cpsMult >> amount;
