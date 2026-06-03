@@ -69,6 +69,9 @@ void CookieOptimizer::addRow()
         productionComboBox->addItems(units);
         productionComboBox->setCurrentIndex(0);
 
+        percentSpinBox = new QSpinBox();
+        percentSpinBox->setMinimum(1);
+
         minuteLabel = new QLabel();
         minuteLabel->setFrameStyle(frameStyle);
 
@@ -79,11 +82,13 @@ void CookieOptimizer::addRow()
         connect(valueComboBox, &QComboBox::currentIndexChanged, this, &CookieOptimizer::updateResults);
         connect(productionSpinBox, &QDoubleSpinBox::valueChanged, this, &CookieOptimizer::updateResults);
         connect(productionComboBox, &QComboBox::currentIndexChanged, this, &CookieOptimizer::updateResults);
+        connect(percentSpinBox, &QSpinBox::valueChanged, this, &CookieOptimizer::updateResults);
 
         gridLayout->addWidget(valueSpinBox, 0, 0);
         gridLayout->addWidget(valueComboBox, 0, 1);
         gridLayout->addWidget(productionSpinBox, 0, 2);
         gridLayout->addWidget(productionComboBox, 0, 3);
+        gridLayout->addWidget(percentSpinBox, 0, 4);
         gridLayout->addWidget(minuteLabel, 0, 6);
         gridLayout->addWidget(percentLabel, 0, 7);
     }
@@ -164,7 +169,7 @@ void CookieOptimizer::updateResults() const
         const double time = value * valueMult / (prod * prodMult);
         sprintf(buffer, "%.1f m", time / 60);
         minuteLabel->setText(buffer);
-        sprintf(buffer, "%.3f", prod / 100);
+        sprintf(buffer, "%.3f", prod / 100 * percentSpinBox->value());
         percentLabel->setText(buffer);
     }
 

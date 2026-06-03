@@ -33,6 +33,7 @@ private:
     QComboBox *valueComboBox;
     QDoubleSpinBoxCustom *productionSpinBox;
     QComboBox *productionComboBox;
+    QSpinBox *percentSpinBox;
     QLabel *minuteLabel;
     QLabel *percentLabel;
 
