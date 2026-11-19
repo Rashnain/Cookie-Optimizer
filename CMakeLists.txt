@@ -6,9 +6,9 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 qt_standard_project_setup()
 
 qt_add_executable(cookie_opimizer
-    main.cpp
-    cookie_optimizer.cpp
-    QDoubleSpinBoxCustom.cpp
+    src/main.cpp
+    src/cookie_optimizer.cpp
+    src/QDoubleSpinBoxCustom.cpp
 )
 
 target_link_libraries(cookie_opimizer PRIVATE
